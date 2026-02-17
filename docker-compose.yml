@@ -6,10 +6,10 @@ services:
       - "1107:443"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - app
-      - feed
+      - feed-blue
+      - feed-green
     networks:
       - web
 
@@ -63,14 +63,12 @@ services:
     networks:
       - web
 
-  feed:
-    image: jeongseho1/minjulog-feed
+  feed-blue:
+    image: jeongseho1/minjulog-feed:blue
     restart: always
     depends_on:
       - mysql
       - redis
-    ports:
-      - "1111:8080"
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MINJULOG_FEED_DB}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
@@ -84,6 +82,30 @@ services:
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
       MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
       MINIO_EXTERNAL_BASE: ${MINIO_EXTERNAL_BASE}
+      DEPLOY_COLOR: blue
+    networks:
+      - web
+
+  feed-green:
+    image: jeongseho1/minjulog-feed:green
+    restart: always
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MINJULOG_FEED_DB}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_PASSWORD: ${REDIS_PASSWORD}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
+      MINIO_EXTERNAL_BASE: ${MINIO_EXTERNAL_BASE}
+      DEPLOY_COLOR: blue
     networks:
       - web
 
