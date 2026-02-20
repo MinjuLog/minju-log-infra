@@ -1,0 +1,17 @@
+port: 7880
+log_level: info
+
+redis:
+  address: redis:6379
+  password: redis1234
+
+keys:
+  devkey: devsecret
+
+rtc:
+  node_ip: 127.0.0.1
+  tcp_port: 7881
+  port_range_start: 40000
+  port_range_end: 40100
+  # Disable auto external IP discovery to avoid startup failure in restricted networks.
+  use_external_ip: false
