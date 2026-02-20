@@ -6,6 +6,7 @@ services:
       - "1107:443"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - app
       - feed-blue
