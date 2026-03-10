@@ -1,5 +1,12 @@
+name: minju-log-infra
+
+x-env-file: &env-file
+  env_file:
+    - .env
+
 services:
   nginx:
+    <<: *env-file
     container_name: minjulog-nginx
     image: nginx:1.27-alpine
     restart: unless-stopped
@@ -16,6 +23,7 @@ services:
       - web
 
   mysql:
+    <<: *env-file
     container_name: minjulog-mysql
     image: mysql:8.0
     restart: always
@@ -36,6 +44,7 @@ services:
       - web
 
   redis:
+    <<: *env-file
     container_name: minjulog-redis
     image: redis:7-alpine
     restart: always
@@ -49,6 +58,7 @@ services:
       - web
 
   app:
+    <<: *env-file
     container_name: minjulog-app
     image: jeongseho1/minjulog-app
     restart: always
@@ -69,6 +79,7 @@ services:
       - web
 
   feed-blue:
+    <<: *env-file
     container_name: minjulog-feed-blue
     image: jeongseho1/minjulog-feed:blue
     restart: always
@@ -93,6 +104,7 @@ services:
       - web
 
   feed-green:
+    <<: *env-file
     container_name: minjulog-feed-green
     image: jeongseho1/minjulog-feed:green
     restart: always
@@ -117,6 +129,7 @@ services:
       - web
 
   minio:
+    <<: *env-file
     container_name: minjulog-minio
     image: minio/minio:latest
     command: server /data --console-address ":9001"
@@ -135,6 +148,7 @@ services:
       - web 
 
   minio-init:
+    <<: *env-file
     container_name: minjulog-minio-init
     image: minio/mc:latest
     restart: "no"
@@ -154,6 +168,7 @@ services:
       - web
       
   livekit:
+    <<: *env-file
     container_name: minjulog-livekit
     image: livekit/livekit-server:latest
     command: ["--config", "/etc/livekit.yaml"]
