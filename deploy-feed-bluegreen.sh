@@ -21,7 +21,7 @@ BLUE_SVC="feed-blue"
 GREEN_SVC="feed-green"
 
 # nginx 컨테이너 이름 (권장: compose에 container_name으로 고정)
-NGINX_CONTAINER="${NGINX_CONTAINER:-minjulog-nginx-1}"
+NGINX_CONTAINER="${NGINX_CONTAINER:-minjulog-nginx}"
 
 # nginx 컨테이너 내부에서 접근 가능한 헬스 URL
 BLUE_HEALTH_URL="${BLUE_HEALTH_URL:-http://feed-blue:8080/health}"
