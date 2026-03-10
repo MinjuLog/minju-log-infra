@@ -1,5 +1,6 @@
 services:
   nginx:
+    container_name: minjulog-nginx
     image: nginx:1.27-alpine
     restart: unless-stopped
     ports:
@@ -15,6 +16,7 @@ services:
       - web
 
   mysql:
+    container_name: minjulog-mysql
     image: mysql:8.0
     restart: always
     ports:
@@ -34,6 +36,7 @@ services:
       - web
 
   redis:
+    container_name: minjulog-redis
     image: redis:7-alpine
     restart: always
     ports:
@@ -46,6 +49,7 @@ services:
       - web
 
   app:
+    container_name: minjulog-app
     image: jeongseho1/minjulog-app
     restart: always
     depends_on:
@@ -65,6 +69,7 @@ services:
       - web
 
   feed-blue:
+    container_name: minjulog-feed-blue
     image: jeongseho1/minjulog-feed:blue
     restart: always
     depends_on:
@@ -88,6 +93,7 @@ services:
       - web
 
   feed-green:
+    container_name: minjulog-feed-green
     image: jeongseho1/minjulog-feed:green
     restart: always
     depends_on:
@@ -111,6 +117,7 @@ services:
       - web
 
   minio:
+    container_name: minjulog-minio
     image: minio/minio:latest
     command: server /data --console-address ":9001"
     environment:
@@ -128,6 +135,7 @@ services:
       - web 
 
   minio-init:
+    container_name: minjulog-minio-init
     image: minio/mc:latest
     restart: "no"
     depends_on:
@@ -146,6 +154,7 @@ services:
       - web
       
   livekit:
+    container_name: minjulog-livekit
     image: livekit/livekit-server:latest
     command: ["--config", "/etc/livekit.yaml"]
     ports:
