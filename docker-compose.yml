@@ -57,6 +57,26 @@ services:
     networks:
       - web
 
+  rabbitmq:
+    <<: *env-file
+    container_name: minjulog-rabbitmq
+    image: rabbitmq:3.13-management
+    restart: always
+    ports:
+      - "15672:15672"
+    expose:
+      - "5672"
+      - "61613"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    volumes:
+      - ./rabbitmq-data:/var/lib/rabbitmq
+      - ./rabbitmq-config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./rabbitmq-config/enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
+    networks:
+      - web
+
   app:
     <<: *env-file
     container_name: minjulog-app
@@ -86,6 +106,7 @@ services:
     depends_on:
       - mysql
       - redis
+      - rabbitmq
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MINJULOG_FEED_DB}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
@@ -94,6 +115,13 @@ services:
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
       SPRING_REDIS_PASSWORD: ${REDIS_PASSWORD}
+      STOMP_BROKER_TYPE: rabbitmq
+      STOMP_RELAY_HOST: rabbitmq
+      STOMP_RELAY_PORT: 61613
+      STOMP_RELAY_CLIENT_LOGIN: ${RABBITMQ_USER}
+      STOMP_RELAY_CLIENT_PASSCODE: ${RABBITMQ_PASSWORD}
+      STOMP_RELAY_SYSTEM_LOGIN: ${RABBITMQ_USER}
+      STOMP_RELAY_SYSTEM_PASSCODE: ${RABBITMQ_PASSWORD}
       MINIO_ENDPOINT: ${MINIO_ENDPOINT}
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
@@ -111,6 +139,7 @@ services:
     depends_on:
       - mysql
       - redis
+      - rabbitmq
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MINJULOG_FEED_DB}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
@@ -119,6 +148,13 @@ services:
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
       SPRING_REDIS_PASSWORD: ${REDIS_PASSWORD}
+      STOMP_BROKER_TYPE: rabbitmq
+      STOMP_RELAY_HOST: rabbitmq
+      STOMP_RELAY_PORT: 61613
+      STOMP_RELAY_CLIENT_LOGIN: ${RABBITMQ_USER}
+      STOMP_RELAY_CLIENT_PASSCODE: ${RABBITMQ_PASSWORD}
+      STOMP_RELAY_SYSTEM_LOGIN: ${RABBITMQ_USER}
+      STOMP_RELAY_SYSTEM_PASSCODE: ${RABBITMQ_PASSWORD}
       MINIO_ENDPOINT: ${MINIO_ENDPOINT}
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}

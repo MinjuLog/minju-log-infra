@@ -40,3 +40,9 @@ out/
 **/.DS_Store
 
 /src/main/resources
+docker-compose.dev.yml
+
+/redis
+/mysql
+/minio
+/rabbitmq-data
